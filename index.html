@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relationship Timer</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        color: white;
+    }
+    #video-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
+    }
+    #video-background {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    #timer-container {
+        position:absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 5px;
+        border-radius: 15px;
+        text-align: center;
+        /*animation: pulse 2s infinite;*/
+        background: linear-gradient(rgb(202, 88, 189), rgb(52, 42, 202));
+        box-shadow: 20px 20px 120px rgba(0, 0, 0, 0.5); /* Shadow */
+    }
+    #timer {
+        font-size:20px;
+        font-weight: bold;
+        font-family:cursive;
+    }
+    #greeting {
+        font-size: 1.2rem;
+        font-weight: bold;
+        font-family:cursive;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    #message {
+        font-size: 1rem;
+        font-weight: bold;
+        font-family:cursive;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        margin-bottom: 10px;
+        box-shadow: 20px;
+    }
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    #music-button {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 20px;
+        border-radius: 10px;
+        background: linear-gradient(rgb(202, 88, 189), rgb(52, 42, 202));
+        color: white;
+        font-family: 'Roboto', sans-serif;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+        outline: none;
+    }
+
+    @media only screen and (max-width: 768px) {
+        #timer-container {
+            width: 90%;
+        }
+    }
+
+    @media only screen and (max-width: 480px) {
+        #timer-container {
+            width: 95%;
+        }
+        #music-button {
+            top: 10px;
+        }
+    }
+</style>
+</head>
+<body>
+<div id="video-container">
+    <video id="video-background" autoplay muted loop>
+        <source src="lavenderBackground.mp4" type="video/mp4">
+    </video>
+</div>
+<div id="timer-container">
+    <div id="greeting">❤️❤️❤️Hey Baby❤️❤️❤️</div>
+    <div id="message">❤️❤️❤️We've been together for❤️❤️❤️</div>
+    <div id="timer"></div>
+</div>
+<button id="music-button" onclick="playMusic()">Play Music</button>
+
+<script>
+    const audio = new Audio('karamelKrow.mp3');
+    let musicPlaying = false;
+
+    function playMusic() {
+        if (!musicPlaying) {
+            audio.play();
+            musicPlaying = true;
+        }
+    }
+
+    // Set the target date for your relationship anniversary
+    const anniversaryDate = new Date("2022-11-14T01:00:00");
+
+    // Function to update the timer every second
+    function updateTimer() {
+        const now = new Date();
+        const timeDiff = now - anniversaryDate;
+
+        let years = 0;
+        let months = 0;
+        let days = 0;
+        let hours = 0;
+        let minutes = 0;
+        let seconds = 0;
+
+        // Calculate years
+        years = now.getFullYear() - anniversaryDate.getFullYear();
+
+        // Calculate months
+        months = now.getMonth() - anniversaryDate.getMonth();
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+
+        // Calculate days
+        const anniversaryThisMonth = new Date(now.getFullYear(), anniversaryDate.getMonth(), anniversaryDate.getDate());
+        if (now < anniversaryThisMonth) {
+            const prevMonth = new Date(now);
+            prevMonth.setMonth(now.getMonth() - 1);
+            days = Math.floor((now - prevMonth) / (1000 * 60 * 60 * 24));
+        } else {
+            days = now.getDate() - anniversaryDate.getDate();
+        }
+
+        // Calculate hours, minutes, and seconds
+        hours = now.getHours() - anniversaryDate.getHours();
+        minutes = now.getMinutes() - anniversaryDate.getMinutes();
+        seconds = now.getSeconds() - anniversaryDate.getSeconds();
+
+        // Display the timer
+        document.getElementById("timer").innerHTML = `${years} year(s) ${months} month(s) ${days} day(s) ${hours} hour(s) ${minutes} minute(s) ${seconds} second(s)`;
+    }
+
+    // Update the timer initially and then every second
+    updateTimer();
+    setInterval(updateTimer, 1000);
+</script>
+</body>
+</html>
